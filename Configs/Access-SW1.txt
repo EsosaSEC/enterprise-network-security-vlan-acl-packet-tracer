@@ -1,0 +1,26 @@
+hostname Access-SW1
+
+vlan 10
+ name HR
+vlan 20
+ name Finance
+
+interface range FastEthernet0/1 - 4
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+
+interface range FastEthernet0/5 - 8
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+ no shutdown
+
+end
+write memory
