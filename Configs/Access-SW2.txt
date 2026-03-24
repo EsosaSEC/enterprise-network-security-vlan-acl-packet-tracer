@@ -1,0 +1,42 @@
+hostname Access-SW2
+
+vlan 30
+ name IT
+vlan 40
+ name Management
+vlan 50
+ name Servers
+vlan 99
+ name Attacker
+
+interface range FastEthernet0/1 - 4
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ no shutdown
+
+interface range FastEthernet0/5 - 6
+ switchport mode access
+ switchport access vlan 40
+ spanning-tree portfast
+ no shutdown
+
+interface range FastEthernet0/7 - 9
+ switchport mode access
+ switchport access vlan 50
+ spanning-tree portfast
+ no shutdown
+
+interface FastEthernet0/10
+ switchport mode access
+ switchport access vlan 99
+ spanning-tree portfast
+ no shutdown
+
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 30,40,50,99
+ no shutdown
+
+end
+write memory
