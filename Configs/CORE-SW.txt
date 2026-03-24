@@ -1,0 +1,100 @@
+hostname CORE-SW
+ip routing
+
+! VLAN Creation
+vlan 10
+ name HR
+vlan 20
+ name Finance
+vlan 30
+ name IT
+vlan 40
+ name Management
+vlan 50
+ name Servers
+vlan 99
+ name Attacker
+
+! SVIs - Default Gateways
+interface Vlan10
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+!
+interface Vlan20
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+!
+interface Vlan30
+ ip address 192.168.30.1 255.255.255.0
+ no shutdown
+!
+interface Vlan40
+ ip address 192.168.40.1 255.255.255.0
+ no shutdown
+!
+interface Vlan50
+ ip address 192.168.50.1 255.255.255.0
+ no shutdown
+!
+interface Vlan99
+ ip address 192.168.99.1 255.255.255.0
+ no shutdown
+
+! Trunk Ports to Access Switches
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no shutdown
+!
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no shutdown
+
+! === ACLs ===
+
+! HR ACL - Block HR <-> Finance
+ip access-list extended HR-ACL
+ deny ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255
+ permit ip any any
+!
+interface Vlan10
+ ip access-group HR-ACL in
+
+! Finance ACL - Block Finance <-> HR
+ip access-list extended FIN-ACL
+ deny ip 192.168.20.0 0.0.0.255 192.168.10.0 0.0.0.255
+ permit ip any any
+!
+interface Vlan20
+ ip access-group FIN-ACL in
+
+! Attacker ACL - Complete Isolation
+ip access-list extended BLOCK-ATTACKER
+ deny ip 192.168.99.0 0.0.0.255 any
+ deny ip any 192.168.99.0 0.0.0.255
+ permit ip any any
+!
+interface Vlan99
+ ip access-group BLOCK-ATTACKER in
+
+! === Secure SSH Management ===
+ip domain-name enterprise.lab
+username ITADMIN privilege 15 secret Cisco@123
+crypto key generate rsa modulus 1024
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+
+ip access-list standard SSH-MGMT
+ permit 192.168.30.0 0.0.0.255
+ permit 192.168.40.0 0.0.0.255
+ deny any
+
+line vty 0 15
+ transport input ssh
+ login local
+ access-class SSH-MGMT in
+
+end
+write memory
