@@ -7,6 +7,16 @@
 ![Cisco Packet Tracer](https://img.shields.io/badge/Cisco%20Packet%20Tracer-2026-1E90FF?style=for-the-badge&logo=cisco)  
 ![Network Security](https://img.shields.io/badge/Network%20Security-VLAN%20%7C%20ACL%20%7C%20SSH-FF4500?style=for-the-badge)
 
+## 📄 Full Project Documentation
+
+**[📋 Download Complete Report (PDF)](https://drive.google.com/file/d/1Kn5fttQSbP123g-Bvzl2qFeQlLzSnlEo/view?usp=drive_link)**
+
+Includes:
+- Executive Summary
+- Detailed Objectives
+- Full CLI Configurations
+- Security Validation & Testing Results
+- Network Topology & Screenshots
 ---
 
 ## 🚀 Project Overview
